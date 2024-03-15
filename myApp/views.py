@@ -7,7 +7,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from myApp.models import Profile, Product
-from datetime import datetime
+
 
 # razorpay client config
 razorpay_client = razorpay.Client(
@@ -25,6 +25,8 @@ def user_register(request):
         # Check if the username is already taken
         if User.objects.filter(username=username).exists():
             return render(request, 'register.html', {'error_message': 'Username is already taken'})
+        if User.objects.filter(email=email).exists():
+            return render(request, 'register.html', {'error_message': 'Email is already use'})
 
         # Create the user
         else:
@@ -43,7 +45,6 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('loginUsername')
         password = request.POST.get('loginPassword')
-        print(password)
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
@@ -52,7 +53,7 @@ def user_login(request):
                 return redirect('/admin/')
             return redirect('homePage')  # Redirect to the home page after successful login
         else:
-            print("user is noat auth")
+            return render(request,'login.html',{'error_message': 'Invalid password'})
     return render(request, 'login.html', )
 
 
@@ -73,16 +74,15 @@ def profile(request):
 
         # Update or create Profile instance
         profile_instance, created = Profile.objects.get_or_create(user=request.user)
+        print(image)
         if image:
             profile_instance.profile_picture = image
-        profile_instance.date = dob
+        if request.user.profile.date != dob:
+            profile_instance.date = dob
         profile_instance.save()
         return redirect('homePage')
-    dob = convert_date(str(request.user.profile.date))
-    print(dob)
     # contex of profile page
     context = {
-        'date_of_birth': dob,
     }
     return render(request, 'profile.html',context)
 
@@ -188,15 +188,4 @@ def paymenthandler(request):
         # if other than POST request is made.
         return render(request, 'payment-aborted.html')
 
-# ------------------------------ DATE FORMATION ----------------------
-
-# convert date dd-mm-yyyy to yyyy-mm-dd
-
-def convert_date(date_str):
-    # Parse the input date string in yyyy-mm-dd format
-    input_date = datetime.strptime(date_str, '%Y-%m-%d')
-
-    # Format the date in dd-mm-yyyy format
-    output_date = input_date.strftime('%d-%m-%Y')
-
-    return output_date
+# -----------------------STRONG PASSWORD VALIDAER ---------------------------

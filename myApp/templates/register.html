@@ -58,6 +58,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
+{% if error_message %}
+<script>
+  alert("{{error_message}}");
+</script>
+{% endif %}
+
+
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
       var password = document.getElementById('registerPassword').value;

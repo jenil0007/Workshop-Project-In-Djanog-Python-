@@ -9,32 +9,43 @@
                 <div class="card-header">
                     <h5 class="card-heading">User Profile</h5>
                 </div>
-                <form method="post">
-                  {% csrf_token %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="card-body text-center">
                         <label for="profilePicture">
-                            <img id="profileImage" src="{{request.user.profile.profile_picture.url}}" alt="Profile Picture"
+                            {% if request.user.profile.profile_picture.url %}
+                            <img id="profileImage" src="{{ request.user.profile.profile_picture.url }}"
+                                 alt="Profile Picture" class="img-fluid rounded-circle mb-3">
+                            {% else %}
+                            <img id="profileImage" src="https://img.freepik.com/premium-psd/3d-cartoon-man-smiling-portrait-isolated-transparent-background-png-psd_888962-1569.jpg" alt="Profile Picture"
                                  class="img-fluid rounded-circle mb-3">
+                            {% endif %}
+
                         </label>
                         <input type="file" name="image_up_lode" id="profilePicture" accept="image/*"
                                style="display: none;" onchange="previewImage(event)">
                         <h5 class="card-title">
-                            <input type="text" name="first_name" class="form-control" value="{{request.user.first_name}}" readonly
+                            <input type="text" name="first_name" class="form-control"
+                                   value="{{request.user.first_name}}" readonly
                                    placeholder="first name">
                         </h5>
                         <p class="card-text">
-                            <input type="text" name="last_name" class="form-control" value="{{request.user.last_name}}" readonly
+                            <input type="text" name="last_name" class="form-control" value="{{request.user.last_name}}"
+                                   readonly
                                    placeholder="last name">
                         </p>
                         <p class="card-text">
-                            <input type="text" name="username" class="form-control" value="{{request.user.username}}" readonly
+                            <input type="text" name="username" class="form-control" value="{{request.user.username}}"
+                                   readonly
                                    placeholder="username">
                         </p>
                         <p class="card-text">
-                            <input type="text" id="dateInput" name="d_o_b" class="form-control" value="{{date_of_birth}}" readonly>
+                            <input type="date" id="dateInput" name="d_o_b" class="form-control"
+                                   value='{{request.user.profile.date | date:"Y-m-d" }}' readonly required>
                         </p>
                         <p class="card-text">
-                            <input type="email" name="email" class="form-control" value="{{request.user.email}}" readonly
+                            <input type="email" name="email" class="form-control" value="{{request.user.email}}"
+                                   readonly
                                    placeholder="Email">
                         </p>
                         <button id="editButton" type="button" class="btn btn-primary" onclick="editProfile()">Edit
@@ -60,8 +71,6 @@
       document.querySelectorAll('.card-body input').forEach(function(input) {
         input.removeAttribute('readonly');
       });
-      var dateInput = document.getElementById('dateInput');
-      dateInput.type = 'date';
       // Toggle visibility of buttons
       document.getElementById('editButton').style.display = 'none';
       document.getElementById('saveButton').style.display = 'inline-block';
