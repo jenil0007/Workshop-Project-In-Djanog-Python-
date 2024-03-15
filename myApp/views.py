@@ -50,7 +50,7 @@ def user_login(request):
             if user.is_superuser:
                 # Redirect superuser to admin panel
                 return redirect('/admin/')
-            return redirect('profile')  # Redirect to the home page after successful login
+            return redirect('homePage')  # Redirect to the home page after successful login
         else:
             print("user is noat auth")
     return render(request, 'login.html', )
