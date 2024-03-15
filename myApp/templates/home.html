@@ -1,0 +1,42 @@
+{% load static %}
+{% include 'header.html' %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Featured Products</h2>
+            <!-- Add featured products here -->
+
+            {% for data in product %}
+            <div class="card-deck mt-3">
+                <div class="card" style="width: 200px; height: auto;">
+                    <img src="{{data.product_img.url}}" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title mt-3">{{data.product_name}}</h5>
+                        <p class="card-text">{{data.product_des}}</p>
+                        <p class="card-text">Price: ₹{{data.product_price}}</p>
+                        <button class="btn btn-primary add-to-cart" data-name="{{data.product_name}}"
+                                data-price="{{data.product_price}}">Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <h2>Shopping Cart</h2>
+            <!-- Add shopping cart summary here -->
+            <ul class="list-group" id="shopping-cart">
+                <!-- Cart items will be added dynamically here -->
+            </ul>
+            <div id="total-price">Total Price: ₹0</div>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="total_price" id="total_price_input">
+                <button type="submit" class="btn btn-success mt-3 checkout">Checkout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

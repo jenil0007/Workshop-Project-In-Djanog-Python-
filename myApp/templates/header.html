@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Website</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Custom CSS -->
+    <style>
+        /* Add your custom styles here */
+        #profileImage {
+          width: 150px; /* Fixed width */
+          height: 150px; /* Fixed height */
+          object-fit: cover; /* Maintain aspect ratio; cover entire element */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Shopping Website</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'homePage' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <!-- Add your account and logout buttons here -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

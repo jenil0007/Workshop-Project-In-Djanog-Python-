@@ -1,0 +1,40 @@
+{% load static %}
+<footer class="footer bg-dark text-light text-center py-3 mt-5">
+    <div class="container">
+        <!-- Add your footer content here -->
+        <p>&copy; 2024 Shopping Website. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- Your custom JavaScript -->
+<script>
+    $(document).ready(function() {
+      var totalPrice = 0;
+      var currencySymbol = '₹'; // Change this to the currency symbol you want to display
+      console.log(totalPrice);
+      $('.add-to-cart').click(function() {
+        var itemName = $(this).data('name');
+        var itemPrice = $(this).data('price');
+        $('#shopping-cart').append('<li class="list-group-item" data-price="' + itemPrice + '">' + itemName + ' - ' + currencySymbol + itemPrice + '<button class="btn btn-sm btn-danger float-right remove-from-cart">Remove</button></li>');
+        totalPrice += itemPrice;
+        $('#total-price').text('Total Price: ' + currencySymbol + totalPrice);
+        console.log(totalPrice);
+        $('#total_price_input').val(totalPrice);
+      });
+
+      $('#shopping-cart').on('click', '.remove-from-cart', function() {
+        var removedPrice = parseFloat($(this).closest('li').data('price'));
+        totalPrice -= removedPrice;
+        $(this).parent().remove();
+        $('#total-price').text('Total Price: ' + currencySymbol + totalPrice);
+        $('#total_price_input').val(totalPrice);
+      });
+    });
+</script>
+
+
+</html>

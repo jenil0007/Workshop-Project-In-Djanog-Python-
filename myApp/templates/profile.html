@@ -1,0 +1,93 @@
+{% load static %}
+{% include 'header.html' %}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-heading">User Profile</h5>
+                </div>
+                <form method="post">
+                  {% csrf_token %}
+                    <div class="card-body text-center">
+                        <label for="profilePicture">
+                            <img id="profileImage" src="{{request.user.profile.profile_picture.url}}" alt="Profile Picture"
+                                 class="img-fluid rounded-circle mb-3">
+                        </label>
+                        <input type="file" name="image_up_lode" id="profilePicture" accept="image/*"
+                               style="display: none;" onchange="previewImage(event)">
+                        <h5 class="card-title">
+                            <input type="text" name="first_name" class="form-control" value="{{request.user.first_name}}" readonly
+                                   placeholder="first name">
+                        </h5>
+                        <p class="card-text">
+                            <input type="text" name="last_name" class="form-control" value="{{request.user.last_name}}" readonly
+                                   placeholder="last name">
+                        </p>
+                        <p class="card-text">
+                            <input type="text" name="username" class="form-control" value="{{request.user.username}}" readonly
+                                   placeholder="username">
+                        </p>
+                        <p class="card-text">
+                            <input type="text" id="dateInput" name="d_o_b" class="form-control" value="{{date_of_birth}}" readonly>
+                        </p>
+                        <p class="card-text">
+                            <input type="email" name="email" class="form-control" value="{{request.user.email}}" readonly
+                                   placeholder="Email">
+                        </p>
+                        <button id="editButton" type="button" class="btn btn-primary" onclick="editProfile()">Edit
+                            Profile
+                        </button>
+                        <button id="saveButton" type="submit" class="btn btn-success" style="display: none;"
+                                onclick="saveProfile()">Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    function editProfile() {
+      // Enable editing of input fields
+      document.querySelectorAll('.card-body input').forEach(function(input) {
+        input.removeAttribute('readonly');
+      });
+      var dateInput = document.getElementById('dateInput');
+      dateInput.type = 'date';
+      // Toggle visibility of buttons
+      document.getElementById('editButton').style.display = 'none';
+      document.getElementById('saveButton').style.display = 'inline-block';
+    }
+
+    function saveProfile() {
+      // Save profile information
+      // For demonstration, let's just disable editing and toggle button visibility
+      document.querySelectorAll('.card-body input').forEach(function(input) {
+        input.setAttribute('readonly', true);
+      });
+      // Toggle visibility of buttons
+      document.getElementById('editButton').style.display = 'inline-block';
+      document.getElementById('saveButton').style.display = 'none';
+
+    }
+
+    function previewImage(event) {
+      const input = event.target;
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profileImage').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+</script>
+{% include 'footer.html' %}
